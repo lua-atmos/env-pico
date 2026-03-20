@@ -21,7 +21,7 @@ Assumes this directory structure:
 ```
 .
 ├── atmos/
-├── env-pico/
+├── env-pico/   <-- we are here
 └── f-streams/
 ```
 
