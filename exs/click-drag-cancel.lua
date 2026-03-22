@@ -3,18 +3,19 @@ local x = require "atmos.x"
 local env  = require "atmos.env.pico"
 local pico = require "pico"
 
-pico.set.title "Lua-Atmos-SDL: Click, Drag, Cancel"
-pico.set.size.window(256, 256)
-pico.set.font(nil, 20)
+pico.set.window {
+    title = "Lua-Atmos-Pico: Click, Drag, Cancel"
+}
+pico.set.dim = {'!', w=256, h=256}
 
 loop(function ()
     local text = ""
-    local rect = {x=256/2,y=256/2, w=40,h=40}
+    local rect = {'!', x=256/2, y=256/2, w=40, h=40}
     spawn(function ()
-        local pt = {x=256/2, y=220}
+        local pt = {'!', x=256/2, y=220, h=20}
         every('draw', function ()
             pico.output.draw.rect(rect)
-            pico.output.draw.text(pt, text)
+            pico.output.draw.text(text, pt)
         end)
     end)
     while true do
