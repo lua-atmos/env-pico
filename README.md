@@ -1,6 +1,15 @@
-# atmos.env.pico
+# atmos-env-pico
 
-A [lua-atmos](../../../) environment for [pico-sdl-lua][1].
+An [Atmos][atmos] environment for [pico-sdl][pico-sdl].
+
+[atmos]:    https://github.com/lua-atmos/atmos/
+[pico-sdl]: https://github.com/fsantanna/pico-sdl/tree/main/lua
+
+# Install
+
+```
+sudo luarocks --lua-version=5.4 install atmos-env-pico
+```
 
 # Run
 
@@ -11,8 +20,6 @@ lua5.4 <lua-path>/atmos/env/pico/exs/click-drag-cancel.lua
 # Events
 
 - TODO
-
-[1]: https://github.com/fsantanna/pico-sdl/tree/main/lua
 
 # Source
 
