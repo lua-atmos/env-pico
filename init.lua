@@ -1,6 +1,8 @@
 local atmos = require "atmos"
 local pico  = require "pico"
 
+pico.init(true)  -- TODO: asymmetric with open/close
+
 pico.zet = pico.set     -- because of `set` keyword in Atmos
 
 local M = {
@@ -10,8 +12,12 @@ local M = {
 }
 
 function M.open ()
-    pico.init(true)
+    --pico.init(true)
     pico.set.expert(true, 1000/M.mpf)
+end
+
+function M.close ()
+    pico.init(false)
 end
 
 local meta = {
@@ -61,10 +67,6 @@ function M.step ()
     pico.output.clear()
     emit('draw')
     pico.output.present()
-end
-
-function M.close ()
-    pico.init(false)
 end
 
 atmos.env(M)
