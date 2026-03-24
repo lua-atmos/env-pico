@@ -48,12 +48,13 @@ local meta = {
 function M.step ()
     local mcur = M.mode and M.mode.current
 
-    local e = pico.input.event((mcur == 'secondary') and 0 or nil)
-    local cur = pico.get.ticks()
-
-    if mcur ~= 'secondary' then
+    local e
+    if mcur == 'secondary' then
+        e = pico.input.event(0)
+    else
+        e = pico.input.event()
         if not e then
-            M.now = cur
+            M.now = pico.get.ticks()
             emit('clock', M.mpf, M.now)
         end
     end
