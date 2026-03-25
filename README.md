@@ -19,7 +19,12 @@ lua5.4 <lua-path>/atmos/env/pico/exs/click-drag-cancel.lua
 
 # Events
 
-- TODO
+- `clock`
+- `'draw'`
+- `'quit'`
+- `'key'` (key down/up, with key name matching)
+- `'mouse.button'` (button down/up, with button name matching)
+- other pico-sdl input events
 
 # Source
 

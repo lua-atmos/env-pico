@@ -4,14 +4,14 @@ local pico  = require "pico"
 pico.zet = pico.set     -- because of `set` keyword in Atmos
 
 local M = {
-    fps = 40,
+    fps = 30,
     now = 0,
     mode = { primary=true, secondary=true },
 }
 
 function M.open ()
     pico.init(true)
-    M.mpf = pico.set.expert(true, M.fps)
+    pico.set.expert(true, M.fps)
 end
 
 function M.close ()
@@ -46,14 +46,14 @@ local meta = {
 function M.step ()
     local mcur = M.mode and M.mode.current
 
-    local e
+    local e, ms
     if mcur == 'secondary' then
         e = pico.input.event(0)
     else
-        e = pico.input.event()
+        e,ms = pico.input.event()
         if not e then
-            M.now = pico.get.ticks()
-            emit('clock', M.mpf, M.now)
+            M.now = pico.get.now()
+            emit('clock', ms, M.now)
         end
     end
 
