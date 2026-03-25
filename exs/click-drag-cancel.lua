@@ -1,15 +1,15 @@
 require "atmos"
 local x = require "atmos.x"
-local env  = require "atmos.env.pico"
+require "atmos.env.pico"
 local pico = require "pico"
 
-pico.set.window {
-    title = "Lua-Atmos-Pico: Click, Drag, Cancel"
-}
-pico.set.dim {'!', w=256, h=256}
-
 loop(function ()
-    local text = " "    -- TODO: empty string
+    pico.set.window {
+        title = "Lua-Atmos-Pico: Click, Drag, Cancel"
+    }
+    pico.set.dim {'!', w=256, h=256}
+
+    local text = ""
     local rect = {'!', x=256/2, y=256/2, w=40, h=40}
     spawn(function ()
         local pt = {'!', x=256/2, y=220, h=20}
