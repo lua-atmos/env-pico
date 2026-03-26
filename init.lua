@@ -1,8 +1,6 @@
 local atmos = require "atmos"
 local pico  = require "pico"
 
-pico.init(true)  -- TODO: asymmetric with open/close
-
 pico.zet = pico.set     -- because of `set` keyword in Atmos
 
 local M = {
@@ -11,9 +9,13 @@ local M = {
     mode = { primary=true, secondary=true },
 }
 
+-- TODO: asymmetric with open/close
+pico.init(true)
+pico.set.expert(true, M.fps)
+
 function M.open ()
     --pico.init(true)
-    pico.set.expert(true, M.fps)
+    --pico.set.expert(true, M.fps)
 end
 
 function M.close ()
