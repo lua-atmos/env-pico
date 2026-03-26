@@ -51,10 +51,8 @@ function M.step ()
         e = pico.input.event(0)
     else
         e,ms = pico.input.event()
-        if not e then
-            M.now = pico.get.now()
-            emit('clock', ms, M.now)
-        end
+        M.now = pico.get.now()
+        emit('clock', ms, M.now)
     end
 
     if e then
