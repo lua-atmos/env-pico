@@ -9,16 +9,10 @@ local M = {
     mode = { primary=true, secondary=true },
 }
 
--- TODO: asymmetric with open/close
 pico.init(true)
 pico.set.expert(true, M.fps)
 
-function M.open ()
-    --pico.init(true)
-    --pico.set.expert(true, M.fps)
-end
-
-function M.close ()
+function M.quit ()
     pico.init(false)
 end
 
