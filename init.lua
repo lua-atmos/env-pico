@@ -61,6 +61,7 @@ function M.step ()
     end
     pico.output.clear()
     emit('draw')
+    pico.output.draw.layers()
     pico.output.present()
 end
 
