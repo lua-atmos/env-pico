@@ -25,7 +25,7 @@ local meta = {
                 return false
             end
         elseif _is_(e.tag, 'mouse.button') and type(awt[2])=='string' then
-            if awt[2] ~= e.but then
+            if not e[awt[2]] then   -- mouse['left']
                 return false
             end
         end
@@ -61,7 +61,6 @@ function M.step ()
     end
     pico.output.clear()
     emit('draw')
-    pico.output.draw.layers()
     pico.output.present()
 end
 
