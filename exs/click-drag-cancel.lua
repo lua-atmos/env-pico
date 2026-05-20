@@ -20,7 +20,7 @@ loop(function ()
     end)
     while true do
         local click = await('mouse.button.dn', function (e)
-            return pico.vs.pos_rect(e, rect), e
+            return pico.vs.pos.rect(e, rect), e
         end)
         local orig = x.copy(rect)
         text = "... clicking ..."
