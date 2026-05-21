@@ -12,7 +12,7 @@ local M = {
 pico.init(true)
 pico.set.expert(true, M.fps)
 
-function M.quit ()
+function M.close ()
     pico.init(false)
 end
 
