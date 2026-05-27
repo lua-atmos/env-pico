@@ -18,14 +18,15 @@ end
 
 local meta = {
     __atmos = function (awt, e)
-        if not _is_(e.tag, awt[1]) then
+        -- awt = { '==', <tag>, <filter>... } : index 1 is the run.lua marker
+        if not _is_(e.tag, awt[2]) then
             return false
-        elseif _is_(e.tag, 'key') and type(awt[2])=='string' then
-            if awt[2] ~= e.key then
+        elseif _is_(e.tag, 'key') and type(awt[3])=='string' then
+            if awt[3] ~= e.key then
                 return false
             end
-        elseif _is_(e.tag, 'mouse.button') and type(awt[2])=='string' then
-            if not e[awt[2]] then   -- mouse['left']
+        elseif _is_(e.tag, 'mouse.button') and type(awt[3])=='string' then
+            if not e[awt[3]] then   -- mouse['left']
                 return false
             end
         end
