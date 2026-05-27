@@ -17,28 +17,32 @@ function M.close ()
 end
 
 local meta = {
-    __atmos = function (awt, e)
+    __atmos = function (awt, e2)
+        local t1, e1, v1 = table.unpack(awt)
         -- awt = { '==', <tag>, <filter>... } : index 1 is the run.lua marker
-        if not _is_(e.tag, awt[2]) then
+        -- only the '==' form carries a tag in e1 (vs 'func' / 'bool')
+        if t1 ~= '==' then
             return false
-        elseif _is_(e.tag, 'key') and type(awt[3])=='string' then
-            if awt[3] ~= e.key then
+        elseif not _is_(e2.tag, e1) then
+            return false
+        elseif _is_(e2.tag, 'key') and type(v1)=='string' then
+            if v1 ~= e2.key then
                 return false
             end
-        elseif _is_(e.tag, 'mouse.button') and type(awt[3])=='string' then
-            if not e[awt[3]] then   -- mouse['left']
+        elseif _is_(e2.tag, 'mouse.button') and type(v1)=='string' then
+            if not e2[v1] then   -- mouse['left']
                 return false
             end
         end
 
         local f = awt[#awt]
         if type(f) == 'function' then
-            if not f(e) then
+            if not f(e2) then
                 return false
             end
         end
 
-        return true, e, e
+        return true, e2, e2
     end
 }
 
