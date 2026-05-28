@@ -22,7 +22,7 @@ local meta = {
         -- awt = { '==', <tag>, <filter>... } : index 1 is the run.lua marker
         -- only the '==' form carries a tag in e1 (vs 'func' / 'bool')
         if t1 ~= '==' then
-            return false
+            return nil  -- standard emit/await check
         elseif not _is_(e2.tag, e1) then
             return false
         elseif _is_(e2.tag, 'key') and type(v1)=='string' then
