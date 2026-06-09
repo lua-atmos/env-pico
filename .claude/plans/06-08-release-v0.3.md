@@ -107,8 +107,15 @@ Create NEW `atmos-env-pico-0.3-1.rockspec` (copy `0.2-1`):
 | `dependencies` atmos | `atmos >= 0.6` | `atmos ~> 0.7` |
 | `pico-sdl` | `>= 0.5` | keep (verify required version) |
 
-- [ ] Create `atmos-env-pico-0.3-1.rockspec`
-- [ ] Verify module list (init + 3 exs)
+- [x] Create `atmos-env-pico-0.3-1.rockspec`
+      (`atmos ~> 0.7`, `pico-sdl ~> 0.6`)
+- [x] Verify module list (init + 3 exs)
+- [x] `dev` follow: revert `dev-1`, create `dev-2`
+      (`atmos ~> 0.7`, `pico-sdl ~> 0.6`, `branch = main`)
+
+REMINDER (manual): move OLD rockspecs to `old/`
+  - `atmos-env-pico-0.2-1.rockspec`
+  - `atmos-env-pico-dev-1.rockspec`
 
 ### 5. Phase 1 tests (local, `LUA_PATH` trick)
 
