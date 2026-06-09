@@ -92,9 +92,10 @@ predicate holds.
 
 ### 3. README.md
 
-- [ ] Update any inline example syntax (clock/await)
-- [ ] Confirm atmos version references (note: install line has
-      no version pin; verify "Environments"/usage prose)
+- [x] Rewrote Events section to v0.7 idiom (bare clock,
+      table-pattern awaits, `until` filter) mirroring env-sdl
+- [x] Version refs already correct (`v0.3`, `atmos v0.7`,
+      `pico-sdl v0.6`); install line has no pin (ok)
 
 ### 4. Rockspec
 
@@ -113,9 +114,8 @@ Create NEW `atmos-env-pico-0.3-1.rockspec` (copy `0.2-1`):
 - [x] `dev` follow: revert `dev-1`, create `dev-2`
       (`atmos ~> 0.7`, `pico-sdl ~> 0.6`, `branch = main`)
 
-REMINDER (manual): move OLD rockspecs to `old/`
-  - `atmos-env-pico-0.2-1.rockspec`
-  - `atmos-env-pico-dev-1.rockspec`
+- [x] Moved OLD rockspecs to `old/` (`0.2-1`, `dev-1`);
+      root now holds only `0.3-1` + `dev-2` (matches atmos layout)
 
 ### 5. Phase 1 tests (local, `LUA_PATH` trick)
 

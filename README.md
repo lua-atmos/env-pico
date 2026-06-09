@@ -29,12 +29,14 @@ lua5.4 <lua-path>/atmos/env/pico/exs/click-drag-cancel.lua
 
 # Events
 
-- `clock`
+- clock (`'clock'`, `us`)
 - `'draw'`
 - `'quit'`
-- `'key'` (key down/up, with key name matching)
-- `'mouse.button'` (button down/up, with button name matching)
-- other pico-sdl input events
+- pico-sdl events:
+    - `await{ tag='key.dn', key='Escape' }`
+    - `await{ tag='mouse.button.dn', left=true }`
+    - `await 'mouse.motion'`
+    - filter: `await{ tag='until', 'mouse.button.dn', pred }`
 
 # Source
 
