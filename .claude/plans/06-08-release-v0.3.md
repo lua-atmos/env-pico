@@ -54,11 +54,11 @@ This plan uses release branches (not tags) for versioning.
 | `meta`/`__atmos` (L19-42) | custom matcher | DELETE (use core matching) |
 | `emit('draw')` (L63) | string tag | keep (valid) |
 
-- [ ] Rename `M.close` -> `M.quit`
-- [ ] Clock: `emit(ms * 1000)` (VERIFY `ms` unit is ms;
-      compare pico-sdl `pico.input.event()` return)
-- [ ] Event: `emit(e)`; delete `meta`/`__atmos`
-- [ ] Confirm `atmos.env(M)` registers (`step`/`quit`/`mode`)
+- [x] Rename `M.close` -> `M.quit`
+- [x] Clock: `emit(ms * 1000)` (VERIFIED `ms` is ms via
+      pico_native debug syms: `ms`/`dt`/`now` + `SDL_GetTicks`)
+- [x] Event: `emit(e)`; delete `meta`/`__atmos`
+- [x] Confirm `atmos.env(M)` registers (`step`/`quit`/`mode`)
 
 #### 1.1 Await/event forms after dropping `__atmos`
 
