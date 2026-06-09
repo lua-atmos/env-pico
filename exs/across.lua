@@ -18,7 +18,7 @@ loop(function()
         for i=pt1.x, pt2.x do
             pt.x = i
             pt.y = i * dy
-            await(clock{ms=50})
+            await(50*_ms_)
         end
     end)
 end)

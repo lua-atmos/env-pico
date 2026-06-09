@@ -86,9 +86,9 @@ predicate holds.
 | `exs/across.lua` | `await(clock{ms=50})` -> `await(50*_ms_)`; `every('draw',...)` stays |
 | `exs/click-drag-cancel.lua` | `await('mouse.button.dn', fn)` -> `await{tag='until','mouse.button.dn',fn}`; `await('key.dn','Escape')` -> `await{tag='key.dn', key='Escape'}`; `every('mouse.motion',fn)` & `every('draw',fn)` stay |
 
-- [ ] `exs/hello.lua`
-- [ ] `exs/across.lua`
-- [ ] `exs/click-drag-cancel.lua`
+- [x] `exs/hello.lua`
+- [x] `exs/across.lua`
+- [x] `exs/click-drag-cancel.lua`
 
 ### 3. README.md
 
@@ -112,9 +112,9 @@ Create NEW `atmos-env-pico-0.3-1.rockspec` (copy `0.2-1`):
 
 ### 5. Phase 1 tests (local, `LUA_PATH` trick)
 
-- [ ] `exs/hello.lua`
-- [ ] `exs/across.lua`
-- [ ] `exs/click-drag-cancel.lua`
+- [x] `exs/hello.lua`
+- [x] `exs/across.lua`
+- [x] `exs/click-drag-cancel.lua`
 
 ### 6. Phase 2 tests (global, `luarocks make`)
 

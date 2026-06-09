@@ -19,13 +19,13 @@ loop(function ()
         end)
     end)
     while true do
-        local click = await('mouse.button.dn', function (e)
-            return pico.vs.pos.rect(e, rect), e
-        end)
+        local click = await{ tag='until', 'mouse.button.dn', function (e)
+            return pico.vs.pos.rect(e, rect)
+        end }
         local orig = x.copy(rect)
         text = "... clicking ..."
         par_or(function ()
-            await('key.dn', 'Escape')
+            await{ tag='key.dn', key='Escape' }
             rect = orig
             text = "!!! CANCELLED !!!"
         end, function ()
