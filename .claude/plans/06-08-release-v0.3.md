@@ -41,7 +41,8 @@ This plan uses release branches (not tags) for versioning.
 
 ### 0. Branch
 
-- [ ] Create branch `v0.3` from current `main`/`v0.2` work
+- [x] Create branch `v0.3` from current `main`/`v0.2` work
+      (done in step 7)
 
 ### 1. Migrate `init.lua`
 
@@ -164,15 +165,23 @@ Apps:
 
 ### 9. Publish to luarocks.org
 
-Published (verified via `luarocks search --all`):
+Ecosystem status (verified via `luarocks search --all`):
 
-| rockspec | published |
-|----------|-----------|
-| 0.1-1/-2/-3 | yes |
-| 0.2-1    | yes |
-| 0.3-1    | NO  |
-| dev-*    | no (dev not uploaded) |
+| package          | local | published | ok |
+|------------------|-------|-----------|----|
+| atmos            | 0.7-1 | 0.7-1     | yes |
+| atmos-env-sdl    | 0.2-1 | 0.2-1     | yes |
+| atmos-env-pico   | 0.3-1 | 0.3-1     | yes |
+| atmos-env-iup    | 0.1-1 | 0.1-1     | yes |
+| atmos-env-socket | 0.1-1 | 0.1-1     | yes |
+| f-streams        | 0.2-4 | 0.2-4     | yes |
+| pico-sdl         | (dep) | 0.6-1     | yes |
 
-- [ ] `luarocks upload atmos-env-pico-0.3-1.rockspec`
-      (needs API key)
-- [ ] re-verify with `luarocks search --all atmos`
+- [x] `atmos-env-pico-0.3-1` uploaded
+- [x] `atmos 0.7-1` uploaded -> dep chain now resolves
+      (atmos ~> 0.7 ok, pico-sdl ~> 0.6 ok)
+
+- [x] `luarocks install atmos-env-pico` -> installs `0.3-1`
+      (clean-room: removed shadowing `dev-2`, reinstalled);
+      installed rock = `0.3-1`, module loads OK. VERIFIED.
+- [x] `atmos-env-sdl 0.2-1` published (verified)
