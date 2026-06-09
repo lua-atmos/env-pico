@@ -13,18 +13,29 @@ An [Atmos][atmos] environment for [pico-sdl][pico-sdl].
 
 Stable branch is [`v0.3`](https://github.com/lua-atmos/env-pico/tree/v0.3).
 
-# Install
+# Install & Run
+
+## Luarocks
 
 ```
 sudo luarocks --lua-version=5.4 install atmos-env-pico
+lua5.4 <lua-path>/atmos/env/pico/exs/click-drag-cancel.lua
 ```
 
 - Dependencies: `pico-sdl v0.6`, `atmos v0.7`
 
-# Run
+## Development
+
+From `luarocks.org`:
 
 ```
-lua5.4 <lua-path>/atmos/env/pico/exs/click-drag-cancel.lua
+sudo luarocks --lua-version=5.4 install --dev atmos-env-pico
+```
+
+From local repo:
+
+```
+sudo luarocks make atmos-env-pico-dev-1.rockspec
 ```
 
 # Events
