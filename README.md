@@ -5,11 +5,21 @@ An [Atmos][atmos] environment for [pico-sdl][pico-sdl].
 [atmos]:    https://github.com/lua-atmos/atmos/
 [pico-sdl]: https://github.com/fsantanna/pico-sdl/tree/main/lua
 
+[
+    [`v0.3`](https://github.com/lua-atmos/env-pico/tree/v0.3)  |
+    [`v0.2`](https://github.com/lua-atmos/env-pico/tree/v0.2)  |
+    [`v0.1`](https://github.com/lua-atmos/env-pico/tree/v0.1)
+]
+
+Stable branch is [`v0.3`](https://github.com/lua-atmos/env-pico/tree/v0.3).
+
 # Install
 
 ```
 sudo luarocks --lua-version=5.4 install atmos-env-pico
 ```
+
+- Dependencies: `pico-sdl v0.6`, `atmos v0.7`
 
 # Run
 
