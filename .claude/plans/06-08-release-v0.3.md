@@ -125,15 +125,15 @@ Create NEW `atmos-env-pico-0.3-1.rockspec` (copy `0.2-1`):
 
 ### 6. Phase 2 tests (global, `luarocks make`)
 
-- [ ] `sudo luarocks make atmos-env-pico-0.3-1.rockspec`
-- [ ] `exs/hello.lua`
-- [ ] `exs/across.lua`
-- [ ] `exs/click-drag-cancel.lua`
+- [x] `sudo luarocks make atmos-env-pico-0.3-1.rockspec`
+- [x] `exs/hello.lua`
+- [x] `exs/across.lua`
+- [x] `exs/click-drag-cancel.lua`
 
 ### 7. Commit, push, branch
 
-- [ ] Commit, push `main`
-- [ ] Create/update branch `v0.3`, push
+- [x] Commit, push `main`
+- [x] Create/update branch `v0.3`, push
 
 ### 8. Dependent apps (separate repos)
 
@@ -152,5 +152,27 @@ Transformation rules (per file):
    (check each app's own next version number)
 
 Apps:
-- [ ] `pico-birds` (`birds-11.lua` + rockspec)
-- [ ] `pico-rocks` (`main.lua` + rockspec)
+- [x] `pico-birds` ALL `birds-01..11.lua` migrated + TESTED OK
+      (clock us->ms, time consts, collision `function ()`,
+      `key.dn`/`Show` table emits/awaits in -11)
+      NOTE: apps have NO rockspec -> dep bump N/A
+- [x] `pico-rocks` (`main.lua`, `battle.lua`, `ts.lua`)
+      + TESTED OK
+      clock us->ms, time consts, `key.dn` table awaits,
+      task-pool await `{tag='tasks',mode='any',tasks=ships}`
+      + `Ship` returns `task().tag` (winner via `s=='L'`)
+
+### 9. Publish to luarocks.org
+
+Published (verified via `luarocks search --all`):
+
+| rockspec | published |
+|----------|-----------|
+| 0.1-1/-2/-3 | yes |
+| 0.2-1    | yes |
+| 0.3-1    | NO  |
+| dev-*    | no (dev not uploaded) |
+
+- [ ] `luarocks upload atmos-env-pico-0.3-1.rockspec`
+      (needs API key)
+- [ ] re-verify with `luarocks search --all atmos`

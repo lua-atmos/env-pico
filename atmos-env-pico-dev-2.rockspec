@@ -11,8 +11,8 @@ description = {
 }
 dependencies = {
    "lua >= 5.4",
-   "atmos ~> 0.7",
-   "pico-sdl ~> 0.6",
+   "atmos",
+   "pico-sdl",
 }
 build = {
    type = "builtin",
