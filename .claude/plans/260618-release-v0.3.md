@@ -35,6 +35,16 @@ replaces `dev-2`) is only to re-publish. Mirror atmos `0.7-2`.
 5. [ ] `luarocks make` + test global
 6. [ ] Commit, push `v0.3`, ff `main`, sync
 7. [ ] `luarocks upload atmos-env-pico-0.3-2.rockspec`
+8. [ ] Re-migrate + test downstream apps (see below)
+
+## Downstream apps (no own plan -- handle here)
+
+Apps hard-break on 0.7-2 too. Same mechanical renames
+(`every`->`loop_on`, `task()`->`xtask()`, `spawn(fn)`->`do_spawn`);
+git-only, push branch (no rock). Test against the new env rock:
+- [ ] pico-birds (branch `v0.6`):   `birds-11.lua`
+- [ ] pico-rocks (branch `v0.6`/master): `main.lua`, `ts.lua`,
+      `battle.lua`
 
 --------------------------------------------------------------
 
