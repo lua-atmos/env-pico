@@ -11,9 +11,9 @@ pico.set.dim {'!', w=256, h=256}
 loop(function ()
     local text = ""
     local rect = {'!', x=256/2, y=256/2, w=40, h=40}
-    spawn(function ()
+    do_spawn(function ()
         local pt = {'!', x=256/2, y=220, h=20}
-        every('draw', function ()
+        loop_on('draw', function ()
             pico.output.draw.rect(rect)
             pico.output.draw.text(text, pt)
         end)
@@ -35,7 +35,7 @@ loop(function ()
                 await 'mouse.button.up'
                 text = "!!! DRAGGED !!!"
             end, function ()
-                every('mouse.motion', function (e)
+                loop_on('mouse.motion', function (e)
                     rect.x = orig.x + (e.x - click.x)
                     rect.y = orig.y + (e.y - click.y)
                 end)

@@ -1,6 +1,24 @@
 # Plan: Re-release env-pico v0.3 (atmos 0.7-2)
 
-## RESUME HERE (state @ 2026-06-18) -- NEXT = §1 migrate
+## RESUME HERE (state @ 2026-06-18) -- NEXT = §3 test local
+
+DONE so far: §1 migrate (5 sites) + §2 grep clean.
+Source `exs/` is now on the 0.7-2 idiom; nothing else touched.
+Resuming on another machine -> see "Resume checklist" below.
+
+### Resume checklist (do in order)
+
+PREREQ (blocker for §3, §5): the env-pico worktree needs
+atmos `0.7-2` INSTALLED, but the box may still have `0.7-1`.
+Verify + install:
+- check: `grep -l loop_on $(luarocks which atmos | ...)` OR
+  `lua5.4 -e 'require"atmos"; print(loop_on)'` (nil => old)
+- the new core lives in sibling repo `../atmos`, branch `v0.7`
+  (`atmos-0.7-2.rockspec` present). Install it:
+  `cd ../atmos && sudo luarocks make atmos-0.7-2.rockspec`
+- also needs `pico-sdl ~> 0.6` already installed (unchanged)
+
+Then continue at §3.
 
 PRIOR CUT (frozen, see bottom): env-pico v0.3 / rock `0.3-1`
 was released for atmos 0.7-1. That work stands. Since then
@@ -28,23 +46,55 @@ replaces `dev-2`) is only to re-publish. Mirror atmos `0.7-2`.
 
 ## Steps (this re-cut)
 
-1. [ ] Migrate the 5 sites above
-2. [ ] Grep clean: no `every(` / `task()` / bare `spawn(function`
-3. [ ] Test local (LUA_PATH): hello, across, click-drag-cancel
-4. [ ] `0.3-2.rockspec` (copy 0.3-1, branch v0.3) + `dev-3`
-5. [ ] `luarocks make` + test global
-6. [ ] Commit, push `v0.3`, ff `main`, sync
-7. [ ] `luarocks upload atmos-env-pico-0.3-2.rockspec`
-8. [ ] Re-migrate + test downstream apps (see below)
+1. [x] Migrate the 5 sites above (loop_on x3, do_spawn x1)
+2. [x] Grep clean: no `every(` / `task()` / bare `spawn(`
+
+3. [ ] Test local (LUA_PATH trick, no install of env-pico):
+   run each from worktree root, point LUA_PATH at `./?.lua`
+   so `atmos.env.pico` resolves to the edited source:
+   - `LUA_PATH="./?.lua;./?/init.lua;;" lua5.4 exs/hello.lua`
+   - `... lua5.4 exs/across.lua`
+   - `... lua5.4 exs/click-drag-cancel.lua`
+   PASS = no `loop_on`/`do_spawn` nil errors; windows behave.
+
+4. [ ] Rockspec rev `0.3-2` + `dev-3`:
+   - copy `atmos-env-pico-0.3-1.rockspec` -> `...-0.3-2.rockspec`
+     change `version="0.3-2"`; keep `source.branch="v0.3"`,
+     `atmos ~> 0.7`, `pico-sdl ~> 0.6`, same module list
+   - update `dev` rockspec: revert/remove `...-dev-2`, create
+     `...-dev-3` (same deps, `branch="v0.3"` or `main`)
+   - move superseded specs to `old/` (mirror atmos layout)
+
+5. [ ] Install global + test:
+   - `sudo luarocks make atmos-env-pico-0.3-2.rockspec`
+   - rerun the 3 exs WITHOUT the LUA_PATH trick (uses rock)
+
+6. [ ] Commit + push:
+   - branch `v0.3`: commit migration + rockspec
+   - push `v0.3`; fast-forward `main` to it; push `main`
+   - (NEVER auto-commit/push -- ASK Francisco first)
+
+7. [ ] Publish: `luarocks upload atmos-env-pico-0.3-2.rockspec`
+   (needs API key). Verify: `luarocks search atmos-env-pico`
+   shows `0.3-2`; clean-room `luarocks install` resolves chain.
+
+8. [ ] Downstream apps (see section below): migrate + test
+   each against the freshly installed env-pico `0.3-2`.
 
 ## Downstream apps (no own plan -- handle here)
 
 Apps hard-break on 0.7-2 too. Same mechanical renames
 (`every`->`loop_on`, `task()`->`xtask()`, `spawn(fn)`->`do_spawn`);
-git-only, push branch (no rock). Test against the new env rock:
-- [ ] pico-birds (branch `v0.6`):   `birds-11.lua`
-- [ ] pico-rocks (branch `v0.6`/master): `main.lua`, `ts.lua`,
-      `battle.lua`
+git-only, push branch (no rock). Test against the new env rock.
+Repos are siblings of this worktree (`../pico-birds`, etc.).
+Per app: grep `every(`/`task()`/bare `spawn(` -> rename ->
+run the file -> commit + push the app branch (ASK first).
+
+- [ ] `../pico-birds` (branch `v0.6`): `birds-11.lua`
+      (re-scan `birds-01..10.lua` -- prior cut migrated old
+       API; re-grep all 11 for the 0.7-2 renames)
+- [ ] `../pico-rocks` (branch `v0.6`/master): `main.lua`,
+      `ts.lua`, `battle.lua` (re-grep all .lua)
 
 --------------------------------------------------------------
 
