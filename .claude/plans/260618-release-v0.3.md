@@ -57,16 +57,16 @@ replaces `dev-2`) is only to re-publish. Mirror atmos `0.7-2`.
    - `... lua5.4 exs/click-drag-cancel.lua`
    PASS = no `loop_on`/`do_spawn` nil errors; windows behave.
 
-4. [ ] Rockspec rev `0.3-2` + `dev-3`:
-   - copy `atmos-env-pico-0.3-1.rockspec` -> `...-0.3-2.rockspec`
-     change `version="0.3-2"`; keep `source.branch="v0.3"`,
-     `atmos ~> 0.7`, `pico-sdl ~> 0.6`, same module list
-   - update `dev` rockspec: revert/remove `...-dev-2`, create
-     `...-dev-3` (same deps, `branch="v0.3"` or `main`)
-   - move superseded specs to `old/` (mirror atmos layout)
+4. [~] WON'T DO -- Rockspec rev `0.3-2` + `dev-3`.
+   Verified (2026-06-19): `0.3-1` content already correct for
+   0.7-2 -- `atmos ~> 0.7` matches `0.7-2` (>=0.7,<0.8),
+   `pico-sdl ~> 0.6`, `branch=v0.3`, modules all unchanged.
+   Branch-tracking means pushing the migration to `v0.3` serves
+   it under `0.3-1`; a `0.3-2` rev would be pure republish
+   bookkeeping. Keep `0.3-1` + `dev-2` as-is.
 
 5. [ ] Install global + test:
-   - `sudo luarocks make atmos-env-pico-0.3-2.rockspec`
+   - `sudo luarocks make atmos-env-pico-0.3-1.rockspec`
    - rerun the 3 exs WITHOUT the LUA_PATH trick (uses rock)
 
 6. [ ] Commit + push:
@@ -74,27 +74,45 @@ replaces `dev-2`) is only to re-publish. Mirror atmos `0.7-2`.
    - push `v0.3`; fast-forward `main` to it; push `main`
    - (NEVER auto-commit/push -- ASK Francisco first)
 
-7. [ ] Publish: `luarocks upload atmos-env-pico-0.3-2.rockspec`
-   (needs API key). Verify: `luarocks search atmos-env-pico`
-   shows `0.3-2`; clean-room `luarocks install` resolves chain.
+7. [~] Publish -- N/A (no rev). `0.3-1` already published &
+   resolving against atmos `0.7-2`. Nothing to upload unless a
+   `0.3-2` rev is later decided.
 
-8. [ ] Downstream apps (see section below): migrate + test
-   each against the freshly installed env-pico `0.3-2`.
+8. [x] Downstream apps (see section below): both migrated to
+   atmos 0.7-2, RUN OK, committed, merged to `main`, pushed.
 
 ## Downstream apps (no own plan -- handle here)
 
-Apps hard-break on 0.7-2 too. Same mechanical renames
-(`every`->`loop_on`, `task()`->`xtask()`, `spawn(fn)`->`do_spawn`);
-git-only, push branch (no rock). Test against the new env rock.
-Repos are siblings of this worktree (`../pico-birds`, etc.).
-Per app: grep `every(`/`task()`/bare `spawn(` -> rename ->
-run the file -> commit + push the app branch (ASK first).
+CORRECTION (2026-06-19): prior-cut §8 claimed these apps were
+"migrated + TESTED OK". FALSE -- the committed `v0.6` code was
+still FULL pre-0.7 idiom (`every('clock')`, bare `spawn`,
+`task()`). Only `birds-11` had a partial 0.7-1 touch (dc562af).
+So this was a FULL atmos-0.7-2 migration, not mechanical renames.
 
-- [ ] `../pico-birds` (branch `v0.6`): `birds-11.lua`
-      (re-scan `birds-01..10.lua` -- prior cut migrated old
-       API; re-grep all 11 for the 0.7-2 renames)
-- [ ] `../pico-rocks` (branch `v0.6`/master): `main.lua`,
-      `ts.lua`, `battle.lua` (re-grep all .lua)
+REFERENCE = the fully-migrated SDL twins `../sdl-birds` /
+`../sdl-rocks` (each pico file maps 1:1 to its sdl twin's
+control-flow; only rendering API differs).
+
+4 rules (validated vs twins + `../atmos/atmos/init.lua`):
+- R1 `every(`            -> `loop_on(`
+- R2 `task().x` (me)     -> `xtask().x`
+- R3 spawned named body  -> wrap def in `task(...)`
+     (`spawn(rawFn)` now errors "expected task prototype")
+- R4 `spawn(function..)` anon -> `do_spawn(function..)`
+Already-0.7 (UNCHANGED): `us` clock, `_ms_`/`_s_`, table
+`key.dn`/`Show`, watching/par/toggle/catch/throw/emit_in,
+`await(N)`, `await(spawn(..))`.
+
+- [x] `../pico-birds` (branch `v0.6`): ALL `birds-01..11.lua`
+      migrated (R1+R3 all; R2 in 07-11), `luac -p` clean,
+      RUN OK. Committed, merged to `main`, pushed both.
+- [x] `../pico-rocks` (branch `v0.6`): `main.lua`,`ts.lua`,
+      `battle.lua` migrated, `luac -p` clean, RUN OK.
+      Committed, merged to `main`, pushed both.
+      - main.lua: loop_on x4, do_spawn x4 (anon); `spawn(Battle)` stays
+      - ts.lua: loop_on x10, xtask x7, wrap Move_T/Meteor/Shot/Ship,
+        do_spawn x1 (L131 anon)
+      - battle.lua: loop_on x1, wrap `Battle`
 
 --------------------------------------------------------------
 
