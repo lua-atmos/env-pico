@@ -11,7 +11,7 @@ loop(function()
 
     local dy = (pt2.y - pt1.y) / (pt2.x - pt1.x)
     par_or(function()
-        every('draw',function()
+        loop_on('draw',function()
             pico.output.draw.pixel(pt)
         end)
     end, function()

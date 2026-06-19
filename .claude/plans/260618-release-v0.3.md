@@ -1,3 +1,123 @@
+# Plan: Re-release env-pico v0.3 (atmos 0.7-2)
+
+## RESUME HERE (state @ 2026-06-18) -- NEXT = §3 test local
+
+DONE so far: §1 migrate (5 sites) + §2 grep clean.
+Source `exs/` is now on the 0.7-2 idiom; nothing else touched.
+Resuming on another machine -> see "Resume checklist" below.
+
+### Resume checklist (do in order)
+
+PREREQ (blocker for §3, §5): the env-pico worktree needs
+atmos `0.7-2` INSTALLED, but the box may still have `0.7-1`.
+Verify + install:
+- check: `grep -l loop_on $(luarocks which atmos | ...)` OR
+  `lua5.4 -e 'require"atmos"; print(loop_on)'` (nil => old)
+- the new core lives in sibling repo `../atmos`, branch `v0.7`
+  (`atmos-0.7-2.rockspec` present). Install it:
+  `cd ../atmos && sudo luarocks make atmos-0.7-2.rockspec`
+- also needs `pico-sdl ~> 0.6` already installed (unchanged)
+
+Then continue at §3.
+
+PRIOR CUT (frozen, see bottom): env-pico v0.3 / rock `0.3-1`
+was released for atmos 0.7-1. That work stands. Since then
+atmos v0.7 grew BREAKING changes (shipping as 0.7-2):
+`every`->`loop_on`, `task()` me-accessor -> `xtask()`,
+`spawn(fn)` -> `do_spawn`. This re-cuts env-pico on the new
+core.
+
+Breaking sites (scan @ 2026-06-18):
+- `exs/hello.lua:6` `every(500*_ms_, ...)`
+- `exs/across.lua:14` `every('draw', ...)`
+- `exs/click-drag-cancel.lua:14` `spawn(function ...)`
+- `exs/click-drag-cancel.lua:16` `every('draw', ...)`
+- `exs/click-drag-cancel.lua:38` `every('mouse.motion', ...)`
+- no `task()` accessor
+
+Mechanical migration:
+- `every(`            -> `loop_on(`
+- `spawn(function...` -> `do_spawn(function...` (self-contained)
+                      else `spawn(task(function...))`
+
+Rocks branch-track `v0.3`, so pushing the fix to `v0.3` already
+serves it under `0.3-1`; a new rock rev `0.3-2` (+ `dev-3`,
+replaces `dev-2`) is only to re-publish. Mirror atmos `0.7-2`.
+
+## Steps (this re-cut)
+
+1. [x] Migrate the 5 sites above (loop_on x3, do_spawn x1)
+2. [x] Grep clean: no `every(` / `task()` / bare `spawn(`
+
+3. [ ] Test local (LUA_PATH trick, no install of env-pico):
+   run each from worktree root, point LUA_PATH at `./?.lua`
+   so `atmos.env.pico` resolves to the edited source:
+   - `LUA_PATH="./?.lua;./?/init.lua;;" lua5.4 exs/hello.lua`
+   - `... lua5.4 exs/across.lua`
+   - `... lua5.4 exs/click-drag-cancel.lua`
+   PASS = no `loop_on`/`do_spawn` nil errors; windows behave.
+
+4. [~] WON'T DO -- Rockspec rev `0.3-2` + `dev-3`.
+   Verified (2026-06-19): `0.3-1` content already correct for
+   0.7-2 -- `atmos ~> 0.7` matches `0.7-2` (>=0.7,<0.8),
+   `pico-sdl ~> 0.6`, `branch=v0.3`, modules all unchanged.
+   Branch-tracking means pushing the migration to `v0.3` serves
+   it under `0.3-1`; a `0.3-2` rev would be pure republish
+   bookkeeping. Keep `0.3-1` + `dev-2` as-is.
+
+5. [ ] Install global + test:
+   - `sudo luarocks make atmos-env-pico-0.3-1.rockspec`
+   - rerun the 3 exs WITHOUT the LUA_PATH trick (uses rock)
+
+6. [ ] Commit + push:
+   - branch `v0.3`: commit migration + rockspec
+   - push `v0.3`; fast-forward `main` to it; push `main`
+   - (NEVER auto-commit/push -- ASK Francisco first)
+
+7. [~] Publish -- N/A (no rev). `0.3-1` already published &
+   resolving against atmos `0.7-2`. Nothing to upload unless a
+   `0.3-2` rev is later decided.
+
+8. [x] Downstream apps (see section below): both migrated to
+   atmos 0.7-2, RUN OK, committed, merged to `main`, pushed.
+
+## Downstream apps (no own plan -- handle here)
+
+CORRECTION (2026-06-19): prior-cut §8 claimed these apps were
+"migrated + TESTED OK". FALSE -- the committed `v0.6` code was
+still FULL pre-0.7 idiom (`every('clock')`, bare `spawn`,
+`task()`). Only `birds-11` had a partial 0.7-1 touch (dc562af).
+So this was a FULL atmos-0.7-2 migration, not mechanical renames.
+
+REFERENCE = the fully-migrated SDL twins `../sdl-birds` /
+`../sdl-rocks` (each pico file maps 1:1 to its sdl twin's
+control-flow; only rendering API differs).
+
+4 rules (validated vs twins + `../atmos/atmos/init.lua`):
+- R1 `every(`            -> `loop_on(`
+- R2 `task().x` (me)     -> `xtask().x`
+- R3 spawned named body  -> wrap def in `task(...)`
+     (`spawn(rawFn)` now errors "expected task prototype")
+- R4 `spawn(function..)` anon -> `do_spawn(function..)`
+Already-0.7 (UNCHANGED): `us` clock, `_ms_`/`_s_`, table
+`key.dn`/`Show`, watching/par/toggle/catch/throw/emit_in,
+`await(N)`, `await(spawn(..))`.
+
+- [x] `../pico-birds` (branch `v0.6`): ALL `birds-01..11.lua`
+      migrated (R1+R3 all; R2 in 07-11), `luac -p` clean,
+      RUN OK. Committed, merged to `main`, pushed both.
+- [x] `../pico-rocks` (branch `v0.6`): `main.lua`,`ts.lua`,
+      `battle.lua` migrated, `luac -p` clean, RUN OK.
+      Committed, merged to `main`, pushed both.
+      - main.lua: loop_on x4, do_spawn x4 (anon); `spawn(Battle)` stays
+      - ts.lua: loop_on x10, xtask x7, wrap Move_T/Meteor/Shot/Ship,
+        do_spawn x1 (L131 anon)
+      - battle.lua: loop_on x1, wrap `Battle`
+
+--------------------------------------------------------------
+
+## PRIOR CUT (frozen -- atmos 0.7-1 era, for reference)
+
 # Plan: Release env-pico v0.3 (atmos v0.7)
 
 ## Context
