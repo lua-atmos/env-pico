@@ -24,12 +24,12 @@ loop(function ()
         end }
         local orig = x.copy(rect)
         text = "... clicking ..."
-        par_or(function ()
+        par_any(function ()
             await{ tag='key.dn', key='Escape' }
             rect = orig
             text = "!!! CANCELLED !!!"
         end, function ()
-            par_or(function ()
+            par_any(function ()
                 await 'mouse.motion'
                 text = "... dragging ..."
                 await 'mouse.button.up'

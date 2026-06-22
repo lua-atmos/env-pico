@@ -10,7 +10,7 @@ loop(function()
     local pt = {'!', x=0, y=0}
 
     local dy = (pt2.y - pt1.y) / (pt2.x - pt1.x)
-    par_or(function()
+    par_any(function()
         loop_on('draw',function()
             pico.output.draw.pixel(pt)
         end)
